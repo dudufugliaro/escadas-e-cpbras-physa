@@ -1,0 +1,139 @@
+
+============================================================
+COBRAS E ESCADAS - SIMULAÇÃO DE MONTE CARLO
+============================================================
+Tabuleiro de 36 casas. Os dois jogadores começam na casa 1; J1 joga primeiro.
+Escadas (sobe):  3 -> 16  5 -> 7  15 -> 25  18 -> 20  21 -> 32
+Cobras (desce):  12 -> 2  14 -> 11  17 -> 4  31 -> 19  35 -> 22
+Premissas: chegar ou passar da casa 36 vence na hora; cobra e escada só valem
+quando o movimento termina nelas; sem jogada extra ao tirar 6; cada pergunta
+muda uma única regra em relação ao jogo original (cenários independentes).
+Partidas por cenário: 10000 | semente: 2026
+Margens (±): intervalo de 95% de confiança. p.p. = pontos percentuais.
+
+============================================================
+VALIDAÇÃO DO CÓDIGO
+============================================================
+[OK]     Tabuleiro: escadas sobem, cobras descem, sem casas com as duas coisas e sem saltos encadeados
+[OK]     Dado justo: faces entre 16.65% e 16.69%; repete o anterior em 16.67% (esperado 16.67%)
+[OK]     Tabuleiro vazio: 10.476 lançamentos por jogador (simulado) vs 10.476 (exato)
+[OK]     Toda partida terminou com um vencedor (0 de 100000 sem vencedor)
+[OK]     Lançamentos ímpares quando J1 vence e pares quando J2 vence (0 erros)
+[OK]     Fórmula da Pergunta 1: 52.63% (jogo simulado) vs 52.56% = (1 + 5.13%) / 2
+Todas as validações passaram.
+
+Partida de exemplo, passo a passo (para conferir à mão no tabuleiro).
+Formato: jogador: casa + dado = casa onde caiu [-> destino]  (evento)
+  J1:  1 + 2 =  3 -> 16  (escada: subiu)
+  J2:  1 + 2 =  3 -> 16  (escada: subiu)
+  J1: 16 + 1 = 17 ->  4  (cobra: desceu)
+  J2: 16 + 1 = 17 ->  4  (cobra: desceu)
+  J1:  4 + 4 =  8
+  J2:  4 + 4 =  8
+  J1:  8 + 4 = 12 ->  2  (cobra: desceu)
+  J2:  8 + 3 = 11
+  J1:  2 + 4 =  6
+  J2: 11 + 3 = 14 -> 11  (cobra: desceu)
+  J1:  6 + 6 = 12 ->  2  (cobra: desceu)
+  J2: 11 + 6 = 17 ->  4  (cobra: desceu)
+  J1:  2 + 4 =  6
+  J2:  4 + 1 =  5 ->  7  (escada: subiu)
+  J1:  6 + 5 = 11
+  J2:  7 + 6 = 13
+  J1: 11 + 1 = 12 ->  2  (cobra: desceu)
+  J2: 13 + 4 = 17 ->  4  (cobra: desceu)
+  J1:  2 + 3 =  5 ->  7  (escada: subiu)
+  J2:  4 + 2 =  6
+  J1:  7 + 4 = 11
+  J2:  6 + 5 = 11
+  J1: 11 + 1 = 12 ->  2  (cobra: desceu)
+  J2: 11 + 3 = 14 -> 11  (cobra: desceu)
+  J1:  2 + 2 =  4
+  J2: 11 + 4 = 15 -> 25  (escada: subiu)
+  J1:  4 + 4 =  8
+  J2: 25 + 4 = 29
+  J1:  8 + 5 = 13
+  J2: 29 + 4 = 33
+  J1: 13 + 1 = 14 -> 11  (cobra: desceu)
+  J2: 33 + 5 = 38  (chegou ao fim)
+Resultado: J2 venceu com 32 lançamentos no total; cobras: J1 = 6, J2 = 5
+
+============================================================
+PERGUNTA 1 - Chance de vitória de quem começa (J1)
+============================================================
+J1 venceu 5228 de 10000 partidas.
+P(J1 vence) = 52.3% (± 1.0 p.p.)
+Mesma conta com as sementes 1 a 5:  52.4%  52.6%  52.6%  52.0%  52.4%
+
+============================================================
+PERGUNTA 2 - Cobras por partida
+============================================================
+Média de cobras por partida, somando os dois jogadores: 3.07 (± 0.05)
+Por jogador: J1 1.59 | J2 1.48
+
+============================================================
+PERGUNTA 3 - Lançamentos por partida com escadas de 50%
+============================================================
+Lançamentos por partida, somando os dois jogadores:
+  regra original (sempre sobe): 18.97 (± 0.16)
+  escada com 50% de chance:     22.37 (± 0.17)
+  diferença: +3.40 lançamentos (+18%)
+
+============================================================
+PERGUNTA 4 - Casa inicial do J2 que equilibra o jogo
+============================================================
+O J2 começa na casa indicada; o J1 continua na casa 1 e joga primeiro.
+Casas com escada ou cobra ficam de fora (começar no 3 seria como começar no 16).
+Cada '#' vale 2 p.p.; o '|' marca 50%.
+
+Casa  P(J1 vence)
+   1   52.3% ± 1.0  #########################|#
+   2   53.0% ± 1.0  #########################|##
+   3  (casa especial, não testada)
+   4   53.5% ± 1.0  #########################|##
+   5  (casa especial, não testada)
+   6   51.7% ± 1.0  #########################|#
+   7   49.9% ± 1.0  #########################|
+   8   49.3% ± 1.0  #########################|
+   9   44.2% ± 1.0  ######################   |
+  10   42.5% ± 1.0  #####################    |
+  11   43.5% ± 1.0  ######################   |
+  12  (casa especial, não testada)
+  13   35.7% ± 0.9  ##################       |
+  14  (casa especial, não testada)
+  15  (casa especial, não testada)
+  16   28.2% ± 0.9  ##############           |
+  17  (casa especial, não testada)
+  18  (casa especial, não testada)
+  19   21.8% ± 0.8  ###########              |
+  20   21.4% ± 0.8  ###########              |
+  21  (casa especial, não testada)
+  22   21.1% ± 0.8  ###########              |
+  23   21.1% ± 0.8  ###########              |
+  24   18.8% ± 0.8  #########                |
+  25   19.2% ± 0.8  ##########               |
+  26   17.6% ± 0.7  #########                |
+  27   14.8% ± 0.7  #######                  |
+  28   13.8% ± 0.7  #######                  |
+  29   14.4% ± 0.7  #######                  |
+  30   11.8% ± 0.6  ######                   |
+  31  (casa especial, não testada)
+  32    6.4% ± 0.5  ###                      |
+  33    5.3% ± 0.4  ###                      |
+  34    4.5% ± 0.4  ##                       |
+  35  (casa especial, não testada)
+
+Mais perto de 50% com 10000 partidas: casa 7.
+
+Confirmação com 200000 partidas (outra semente), casas a até 2 p.p. de 50%:
+   6  51.98% ± 0.22
+   7  49.64% ± 0.22
+   8  48.61% ± 0.22
+Resposta: o J2 deve começar na casa 7.
+
+============================================================
+PERGUNTA 5 - J2 imune à primeira cobra
+============================================================
+P(J1 vence), regra original:   52.3% (± 1.0 p.p.)
+P(J1 vence), J2 com imunidade: 38.9% (± 1.0 p.p.)
+Diferença: -13.4 p.p.
